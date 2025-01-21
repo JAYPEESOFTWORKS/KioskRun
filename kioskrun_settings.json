@@ -4,6 +4,5 @@
   "DESIRED_VERSION": "1.0.0",
   "STORAGE_PATH": "C:/Data/KioskApp/",
   "APP_EXE": "YourKioskApp.exe",
-  "SPLASH_WAIT_SECONDS": 5,
-  "LOGO_PATH": "./logo.png"
+  "SPLASH_WAIT_SECONDS": 5
 }

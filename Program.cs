@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 
 namespace KioskRun {
     class Program {
+
+        [STAThread]
         public static void Main(string[] args) {
             BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
             UpdateText("Initializing...");
@@ -51,12 +53,14 @@ namespace KioskRun {
                 UpdateText($"Downloading {version}...");
                 await Task.Delay(2000);
 
-                using HttpClient client = new HttpClient();
-                HttpResponseMessage response = await client.GetAsync(zipUrl);
-                response.EnsureSuccessStatusCode();
+                using (HttpClient client = new HttpClient()) {
+                    HttpResponseMessage response = await client.GetAsync(zipUrl);
+                    response.EnsureSuccessStatusCode();
 
-                await using FileStream fileStream = new FileStream(zipPath, FileMode.Create);
-                await response.Content.CopyToAsync(fileStream);
+                    await using (FileStream fileStream = new FileStream(zipPath, FileMode.Create)) {
+                        await response.Content.CopyToAsync(fileStream);
+                    } // Ensure file stream is properly disposed of here
+                } // Ensure HttpClient is properly disposed of here
 
                 Directory.CreateDirectory(downloadPath);
                 ZipFile.ExtractToDirectory(zipPath, downloadPath);

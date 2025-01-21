@@ -2,6 +2,8 @@
 using Avalonia.Media.Imaging;
 using Avalonia.Markup.Xaml;
 using Microsoft.Extensions.Configuration;
+using Avalonia.Platform;
+using Avalonia;
 
 namespace KioskRun {
     public class MainWindow : Window {
@@ -25,21 +27,26 @@ namespace KioskRun {
                 _displayText.Text = text;
             }
         }
-
+        
         private void LoadLogo() {
-            // Ensure the logo file exists
-            string logoPath = "./logo.png"; // Path relative to the executable
-            if (System.IO.File.Exists(logoPath)) {
-                var bitmap = new Bitmap(logoPath);
+        var uri = new Uri("avares://KioskRun/Assets/logo.png");
+        using (var stream = AssetLoader.Open(uri)) {
+            if (stream != null) {
+                var bitmap = new Bitmap(stream);
                 var logoImage = this.FindControl<Image>("LogoImage");
                 if (logoImage != null) {
                     logoImage.Source = bitmap;
                 }
+                else {
+                    System.Diagnostics.Debug.WriteLine("LogoImage control not found!");
+                }
             }
             else {
-                // Handle case when the logo file is not found
-                System.Diagnostics.Debug.WriteLine("Logo file not found!");
+                System.Diagnostics.Debug.WriteLine("Embedded logo resource not found!");
             }
         }
     }
+
+
+}
 }

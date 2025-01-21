@@ -1,49 +1,48 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-	  <UseWPF>false</UseWPF>
-    <UseWinUI>false</UseWinUI>
-    <UseAvalonia>true</UseAvalonia>
-    <PublishTrimmed>True</PublishTrimmed> <!-- Ensure this is true -->
-	  <IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
-  </PropertyGroup>
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net8.0</TargetFramework>
+		<RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<UseWPF>false</UseWPF>
+		<UseWinUI>false</UseWinUI>
+		<PublishTrimmed>True</PublishTrimmed>
+		<!-- Ensure this is true -->
+		<IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <None Remove="App.xaml" />
-    <None Remove="logo.png" />
-    <None Remove="MainWindow.xaml" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Remove="App.xaml" />
+		<None Remove="MainWindow.xaml" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <AvaloniaResource Include="App.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </AvaloniaResource>
-    <AvaloniaResource Include="MainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </AvaloniaResource>
-  </ItemGroup>
+	<ItemGroup>
+		<AvaloniaResource Include="App.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</AvaloniaResource>
+		<AvaloniaResource Include="MainWindow.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</AvaloniaResource>
+	</ItemGroup>
+	<ItemGroup>
+		<AvaloniaResource Include="Assets\logo.png" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Content Include="logo.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Avalonia" Version="11.2.3" />
-    <PackageReference Include="Avalonia.Desktop" Version="11.2.3" />
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="9.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.1" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Avalonia" Version="11.2.3" />
+		<PackageReference Include="Avalonia.Desktop" Version="11.2.3" />
+		<PackageReference Include="MessageBox.Avalonia" Version="3.2.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.1" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="9.0.1" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.1" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <None Update="Avalonia.Xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </None>
-  </ItemGroup>
+	<ItemGroup>
+		<None Update="Avalonia.Xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</None>
+	</ItemGroup>
 </Project>

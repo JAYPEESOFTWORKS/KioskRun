@@ -1,14 +1,12 @@
 ﻿using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using Avalonia.OpenGL;
 using Avalonia.Threading;
 using Microsoft.Extensions.Configuration;
-using System;
 using System.Diagnostics;
-using System.IO.Compression;
 using System.Text.Json;
-using System.Threading.Tasks;
+using MsBox.Avalonia;
+using MsBox.Avalonia.Enums;
 
 namespace KioskRun {
     public class App : Application {
@@ -18,19 +16,29 @@ namespace KioskRun {
         private string? storagePath;
         private string? appExe;
         private int splashWaitSeconds;
+        private bool configFileMissing = false;
+        private string configFilePath = string.Empty;
 
         public override void Initialize() {
             LoadConfiguration();
             AvaloniaXamlLoader.Load(this);
         }
 
-        private void LoadConfiguration() {
-            string basePath = Directory.GetCurrentDirectory();
+        private async void MsgBox(string message) {
+            await MessageBoxManager.GetMessageBoxStandard("KioskRun", message).ShowAsync();
+        }
+
+        private void LoadConfiguration() {            
+            string basePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+            configFilePath = basePath + "\\kioskrun_settings.json";
+            configFileMissing = !File.Exists(configFilePath);
+            if (configFileMissing){                
+                return;
+            }
             var config = new ConfigurationBuilder()
                 .SetBasePath(basePath)
-                .AddJsonFile("appsettings.json")
+                .AddJsonFile("kioskrun_settings.json")
                 .Build();
-
             projectId = config["PROJECT_ID"] ?? string.Empty;
             apiUrl = config["API_URL"] ?? string.Empty;
             desiredVersion = config["DESIRED_VERSION"] ?? string.Empty;
@@ -84,7 +92,11 @@ namespace KioskRun {
 
             if (string.IsNullOrEmpty(apiUrl) || string.IsNullOrEmpty(projectId) ||
                 string.IsNullOrEmpty(desiredVersion) || string.IsNullOrEmpty(appExe)) {
-                Program.UpdateText("Invalid config!");
+                if (configFileMissing) {
+                    Program.UpdateText("Missing " + configFilePath + "...");
+                } else {
+                    Program.UpdateText("Invalid config!");
+                }                
                 return;
             }
 
